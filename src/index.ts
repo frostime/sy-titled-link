@@ -1,5 +1,6 @@
 import * as siyuan from "siyuan";
 import { forwardProxy } from "./api";
+// import iconv from "iconv-lite";
 
 
 const getTitle = async (href) => {
@@ -24,8 +25,7 @@ const getTitle = async (href) => {
             matchRes = html?.match(charsetReg);
             let charset = matchRes ? matchRes[1] : "utf-8";
             if (charset !== "utf-8") {
-                let decoder = new TextDecoder(charset);
-                title = decoder.decode(new TextEncoder().encode(title));
+                // title = iconv.decode(title, charset);
             }
         }
     }
