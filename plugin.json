@@ -1,26 +1,25 @@
 {
-  "name": "plugin-sample-vite",
+  "name": "titled-url",
   "author": "frostime",
-  "url": "https://github.com/frostime/plugin-sample-vite",
-  "version": "0.2.3",
-  "minAppVersion": "2.10.3",
-  "backends": ["all"],
-  "frontends": ["all"],
+  "url": "https://github.com/frostime/titled-url",
+  "version": "1.0.0",
+  "minAppVersion": "2.9.0",
+  "backends": [
+        "all"
+  ],
+  "frontends": [
+        "all"
+  ],
   "displayName": {
-    "en_US": "Plugin sample with vite",
-    "zh_CN": "插件样例 vite 版"
+    "en_US": "Titled Url",
+    "zh_CN": "Titled Url"
   },
   "description": {
-    "en_US": "SiYuan plugin sample with vite",
-    "zh_CN": "使用 vite 开发的思源插件样例"
+    "en_US": "Get the title of the web url",
+    "zh_CN": "获取网页链接的标题"
   },
   "readme": {
-    "en_US": "README.md",
-    "zh_CN": "README_zh_CN.md"
-  },
-  "funding": {
-    "custom": [
-      "https://afdian.net/a/frostime"
-    ]
+    "en_US": "README_en_US.md",
+    "zh_CN": "README.md"
   }
 }
