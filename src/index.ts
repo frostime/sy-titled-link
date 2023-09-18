@@ -11,6 +11,9 @@ const IconUrl = `
 const getTitle = async (href) => {
     console.log(href);
     let title = null;
+    if (href.startsWith("www.")) {
+        href = "http://" + href;
+    }
     if (href.startsWith("http")) {
         let data = await forwardProxy(
             href, 'GET', null,
@@ -31,6 +34,7 @@ const getTitle = async (href) => {
             let charset = matchRes ? matchRes[1] : "utf-8";
             if (charset !== "utf-8") {
                 // title = iconv.decode(title, charset);
+                title = null;
             }
         }
     }
@@ -89,7 +93,7 @@ class TitledUrlPlugin extends siyuan.Plugin {
         const hrefSpan = detail.element;
 
         let dataHref = hrefSpan.getAttribute("data-href");
-        if (!dataHref?.startsWith("http")) {
+        if (!dataHref?.startsWith("http") && !dataHref?.startsWith("www.")) {
             return;
         }
 
