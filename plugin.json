@@ -2,7 +2,7 @@
   "name": "titled-url",
   "author": "frostime",
   "url": "https://github.com/frostime/titled-url",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "minAppVersion": "2.9.0",
   "backends": [
         "all"
