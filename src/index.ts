@@ -32,7 +32,7 @@ const getTitle = async (href) => {
             title = matchRes[1];
             matchRes = html?.match(charsetReg);
             let charset = matchRes ? matchRes[1] : "utf-8";
-            if (charset !== "utf-8") {
+            if (charset.toLowerCase() !== "utf-8") {
                 // title = iconv.decode(title, charset);
                 title = null;
             }
