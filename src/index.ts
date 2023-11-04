@@ -30,6 +30,8 @@ const getTitle = async (href) => {
         let matchRes = html?.match(titleReg);
         if (matchRes) {
             title = matchRes[1];
+            //@ts-ignore
+            title = window.Lute.UnEscapeHTMLStr(title);
             matchRes = html?.match(charsetReg);
             let charset = matchRes ? matchRes[1] : "utf-8";
             if (charset.toLowerCase() !== "utf-8") {
