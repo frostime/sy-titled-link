@@ -77,13 +77,26 @@ class TitledUrlPlugin extends siyuan.Plugin {
         // console.log(element, protyle);
         menu.addItem({
             icon: "iconUrl",
-            label: this.i18n.GetTitle,
+            label: this.i18n.GetTitle1,
             click: async () => {
                 let spans = [];
                 for (let ele of elements) {
                     spans.push(...ele.querySelectorAll("span[data-type=\"a\"]"));
                 }
-                this.replaceHrefAnchor(protyle, ...spans);
+                this.replaceHrefAnchor(protyle, 'text', ...spans);
+            }
+        });
+        menu.addItem({
+            icon: "iconUrl",
+            label: this.i18n.GetTitle2,
+            click: async () =>
+            {
+                let spans = [];
+                for (let ele of elements)
+                {
+                    spans.push(...ele.querySelectorAll("span[data-type=\"a\"]"));
+                }
+                this.replaceHrefAnchor(protyle, 'title', ...spans);
             }
         });
     }
@@ -101,14 +114,23 @@ class TitledUrlPlugin extends siyuan.Plugin {
 
         menu.addItem({
             icon: "iconUrl",
-            label: this.i18n.GetTitle,
+            label: this.i18n.GetTitle1,
             click: async () => {
-                this.replaceHrefAnchor(protyle, hrefSpan);
+                this.replaceHrefAnchor(protyle, 'text', hrefSpan);
+            }
+        });
+        menu.addItem({
+            icon: "iconUrl",
+            label: this.i18n.GetTitle2,
+            click: async () =>
+            {
+                this.replaceHrefAnchor(protyle, 'title', hrefSpan);
             }
         });
     }
 
-    async replaceHrefAnchor(protyle, ...elements) {
+    async replaceHrefAnchor(protyle, mode, ...elements)
+    {
         const updateProtyle = () => {
             let inputEvent = new Event("input");
             protyle.wysiwyg.element.dispatchEvent(inputEvent);
@@ -118,8 +140,12 @@ class TitledUrlPlugin extends siyuan.Plugin {
             let dataHref = element.getAttribute("data-href");
             let title = await getTitle(dataHref);
             console.log('Title:', title, '\n\t=>', dataHref);
-            if (title) {
-                element.innerText = title;
+            if (title)
+            {
+                if (mode == 'text')
+                    element.innerText = title;
+                else if (mode == 'title')
+                    element.setAttribute('data-title', title);
             }
             return
         }
