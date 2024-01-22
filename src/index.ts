@@ -83,7 +83,7 @@ class TitledUrlPlugin extends siyuan.Plugin {
                 for (let ele of elements) {
                     spans.push(...ele.querySelectorAll("span[data-type=\"a\"]"));
                 }
-                this.replaceHrefAnchor(protyle, 'text', ...spans);
+                this.replaceHrefAnchor(protyle, 'anchor', ...spans);
             }
         });
         menu.addItem({
@@ -116,7 +116,7 @@ class TitledUrlPlugin extends siyuan.Plugin {
             icon: "iconUrl",
             label: this.i18n.GetTitle1,
             click: async () => {
-                this.replaceHrefAnchor(protyle, 'text', hrefSpan);
+                this.replaceHrefAnchor(protyle, 'anchor', hrefSpan);
             }
         });
         menu.addItem({
@@ -128,7 +128,7 @@ class TitledUrlPlugin extends siyuan.Plugin {
             }
         });
     }
-
+'anchor'
     async replaceHrefAnchor(protyle, mode, ...elements)
     {
         const updateProtyle = () => {
@@ -142,7 +142,7 @@ class TitledUrlPlugin extends siyuan.Plugin {
             console.log('Title:', title, '\n\t=>', dataHref);
             if (title)
             {
-                if (mode == 'text')
+                if (mode == 'anchor')
                     element.innerText = title;
                 else if (mode == 'title')
                     element.setAttribute('data-title', title);
