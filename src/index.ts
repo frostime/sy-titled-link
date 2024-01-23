@@ -77,26 +77,13 @@ class TitledUrlPlugin extends siyuan.Plugin {
         // console.log(element, protyle);
         menu.addItem({
             icon: "iconUrl",
-            label: this.i18n.GetTitle1,
+            label: this.i18n.GetTitle,
             click: async () => {
                 let spans = [];
                 for (let ele of elements) {
                     spans.push(...ele.querySelectorAll("span[data-type=\"a\"]"));
                 }
-                this.replaceHrefAnchor(protyle, 'anchor', ...spans);
-            }
-        });
-        menu.addItem({
-            icon: "iconUrl",
-            label: this.i18n.GetTitle2,
-            click: async () =>
-            {
-                let spans = [];
-                for (let ele of elements)
-                {
-                    spans.push(...ele.querySelectorAll("span[data-type=\"a\"]"));
-                }
-                this.replaceHrefAnchor(protyle, 'title', ...spans);
+                this.replaceHrefAnchor(protyle, ...spans);
             }
         });
     }
@@ -114,23 +101,14 @@ class TitledUrlPlugin extends siyuan.Plugin {
 
         menu.addItem({
             icon: "iconUrl",
-            label: this.i18n.GetTitle1,
+            label: this.i18n.GetTitle,
             click: async () => {
-                this.replaceHrefAnchor(protyle, 'anchor', hrefSpan);
-            }
-        });
-        menu.addItem({
-            icon: "iconUrl",
-            label: this.i18n.GetTitle2,
-            click: async () =>
-            {
-                this.replaceHrefAnchor(protyle, 'title', hrefSpan);
+                this.replaceHrefAnchor(protyle, hrefSpan);
             }
         });
     }
-'anchor'
-    async replaceHrefAnchor(protyle, mode, ...elements)
-    {
+
+    async replaceHrefAnchor(protyle, ...elements: HTMLElement[]) {
         const updateProtyle = () => {
             let inputEvent = new Event("input");
             protyle.wysiwyg.element.dispatchEvent(inputEvent);
@@ -140,12 +118,9 @@ class TitledUrlPlugin extends siyuan.Plugin {
             let dataHref = element.getAttribute("data-href");
             let title = await getTitle(dataHref);
             console.log('Title:', title, '\n\t=>', dataHref);
-            if (title)
-            {
-                if (mode == 'anchor')
-                    element.innerText = title;
-                else if (mode == 'title')
-                    element.setAttribute('data-title', title);
+            if (title) {
+                element.innerText = title;
+                element.setAttribute('data-title', title);
             }
             return
         }
