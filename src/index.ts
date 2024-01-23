@@ -2,6 +2,8 @@ import * as siyuan from "siyuan";
 import { forwardProxy } from "./api";
 // import iconv from "iconv-lite";
 
+import { SettingUtils } from "./libs/setting-utils";
+
 const IconUrl = `
 <symbol id="iconUrl" viewBox="0 0 1024 1024"><path d="M578.133 675.627c-3.306-3.307-8.746-3.307-12.053 0L442.133 799.573c-57.386 57.387-154.24 63.467-217.6 0-63.466-63.466-57.386-160.213 0-217.6L348.48 458.027c3.307-3.307 3.307-8.747 0-12.054l-42.453-42.453c-3.307-3.307-8.747-3.307-12.054 0L170.027 527.467c-90.24 90.24-90.24 236.266 0 326.4s236.266 90.24 326.4 0L620.373 729.92c3.307-3.307 3.307-8.747 0-12.053l-42.24-42.24z m275.84-505.6c-90.24-90.24-236.266-90.24-326.4 0L403.52 293.973c-3.307 3.307-3.307 8.747 0 12.054l42.347 42.346c3.306 3.307 8.746 3.307 12.053 0l123.947-123.946c57.386-57.387 154.24-63.467 217.6 0 63.466 63.466 57.386 160.213 0 217.6L675.52 565.973c-3.307 3.307-3.307 8.747 0 12.054l42.453 42.453c3.307 3.307 8.747 3.307 12.054 0l123.946-123.947c90.134-90.24 90.134-236.266 0-326.506z"></path><path d="M616.64 362.987c-3.307-3.307-8.747-3.307-12.053 0l-241.6 241.493c-3.307 3.307-3.307 8.747 0 12.053l42.24 42.24c3.306 3.307 8.746 3.307 12.053 0L658.773 417.28c3.307-3.307 3.307-8.747 0-12.053l-42.133-42.24z"></path>
 </symbol>
@@ -43,14 +45,28 @@ const getTitle = async (href) => {
     return title;
 }
 
+const STORAGE_NAME = 'config.json';
+
 class TitledUrlPlugin extends siyuan.Plugin {
     onOpenMenuLinkBindThis = this.onOpenMenuLink.bind(this);
     onClickBlockIconBindThis = this.onClickBlockIcon.bind(this);
+
+    private settingUtils: SettingUtils;
 
     onload() {
         this.addIcons(IconUrl);
         this.eventBus.on("open-menu-link", this.onOpenMenuLinkBindThis);
         this.eventBus.on("click-blockicon", this.onClickBlockIconBindThis);
+
+        this.settingUtils = new SettingUtils(this, STORAGE_NAME);
+        this.settingUtils.addItem({
+            key: "replaceTitle",
+            value: true,
+            type: 'checkbox',
+            title: '替换标题部分',
+            description: '默认只替换锚文本, 如果开启此选项, 会同时替换标题字段'
+        })
+
     }
 
     onunload() {
@@ -120,7 +136,10 @@ class TitledUrlPlugin extends siyuan.Plugin {
             console.log('Title:', title, '\n\t=>', dataHref);
             if (title) {
                 element.innerText = title;
-                element.setAttribute('data-title', title);
+                const replaceTitle = this.settingUtils.get('replaceTitle');
+                if (replaceTitle) {
+                    element.setAttribute('data-title', title);
+                }
             }
             return
         }
