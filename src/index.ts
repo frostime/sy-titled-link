@@ -58,14 +58,20 @@ class TitledUrlPlugin extends siyuan.Plugin {
         this.eventBus.on("open-menu-link", this.onOpenMenuLinkBindThis);
         this.eventBus.on("click-blockicon", this.onClickBlockIconBindThis);
 
-        this.settingUtils = new SettingUtils(this, STORAGE_NAME);
+        this.settingUtils = new SettingUtils(this, STORAGE_NAME, null, null, '300px');
         this.settingUtils.addItem({
             key: "replaceTitle",
             value: true,
             type: 'checkbox',
-            title: '替换标题部分',
-            description: '默认只替换锚文本, 如果开启此选项, 会同时替换标题字段'
-        })
+            title: this.i18n.replaceTitle.title,
+            description: this.i18n.replaceTitle.description
+        });
+
+        try {
+            this.settingUtils.load();
+        } catch (error) {
+            console.error("Error loading settings storage, probably empty config json:", error);
+        }
 
     }
 
