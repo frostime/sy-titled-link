@@ -1,3 +1,7 @@
 {
-    "GetTitle": "Get Url's Title"
+    "GetTitle": "Replace with Url's Title",
+    "replaceTitle": {
+        "title": "Replace Title Too",
+        "description": "By default, only the anchor text is replaced. <br/>If this option is turned on, the title field will be replaced at the same time."
+    }
 }
