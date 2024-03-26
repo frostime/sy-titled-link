@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2023-12-17 18:28:19
  * @FilePath     : /src/libs/setting-utils.ts
- * @LastEditTime : 2024-01-23 19:53:48
+ * @LastEditTime : 2024-03-26 14:19:21
  * @Description  : 
  */
 
@@ -29,7 +29,7 @@ export class SettingUtils {
                     this.updateValueFromElement(key);
                 }
                 let data = this.dump();
-                if (callback !== undefined) {
+                if (callback !== undefined && callback !== null) {
                     callback(data);
                 } else {
                     this.plugin.data[this.name] = data;
