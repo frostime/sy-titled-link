@@ -10,40 +10,79 @@ const IconUrl = `
 `;
 
 
-const getTitle = async (href) => {
-    console.log(href);
+const isDesktop = (): boolean => {
+    return typeof window !== 'undefined' && !!window.require;
+};
+
+const getTitle = async (href: string): Promise<string | null> => {
     let title = null;
+
+    // Normalize URL
     if (href.startsWith("www.")) {
-        href = "http://" + href;
+        href = "https://" + href;
+    } else if (!href.startsWith("http")) {
+        return null;
     }
-    if (href.startsWith("http")) {
-        let data = await forwardProxy(
-            href, 'GET', null,
-            [{ 'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76" }],
-            5000, 'text/html'
-        );
-        if (!data || (data.status / 100) !== 2) {
-            return null;
+
+    try {
+        let html: string;
+        const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 Edg/116.0.1938.76";
+
+        if (!isDesktop()) {
+            // 浏览器环境必须依赖内核 API
+            const data = await forwardProxy(
+                href, 'GET', null,
+                [{ 'User-Agent': userAgent }],
+                5000, 'text/html'
+            );
+
+            if (!data || (data.status / 100) !== 2) {
+                return null;
+            }
+            html = data?.body;
+        } else {
+            const response = await fetch(href, {
+                method: 'GET',
+                headers: {
+                    'User-Agent': userAgent
+                },
+                redirect: 'follow'
+            });
+
+            if (!response.ok) {
+                return null;
+            }
+            html = await response.text();
         }
-        let html = data?.body;
-        let charsetReg = /<meta\b[^>]*charset=['"]?([^'"]*)['"]?[^>]*>/;
-        //获取 html 的 dom 当中 head 内部的 title 标签的内容
-        let titleReg = /<title\b[^>]*>(.*?)<\/title>/;
-        let matchRes = html?.match(titleReg);
+
+        // Common HTML parsing logic
+        const titleReg = /<title\b[^>]*>(.*?)<\/title>/i;
+        const matchRes = html.match(titleReg);
+
         if (matchRes) {
             title = matchRes[1];
-            //@ts-ignore
-            title = window.Lute.UnEscapeHTMLStr(title);
-            matchRes = html?.match(charsetReg);
-            let charset = matchRes ? matchRes[1] : "utf-8";
-            if (charset.toLowerCase() !== "utf-8") {
-                // title = iconv.decode(title, charset);
+            //@ts-ignore - assuming Lute is available in global scope
+            title = window.Lute?.UnEscapeHTMLStr(title) || title;
+
+            // Charset detection
+            const charsetReg = /<meta\b[^>]*charset=['"]?([^'"]*)['"]?[^>]*>/i;
+            const charsetMatch = html.match(charsetReg);
+            const charset = charsetMatch ? charsetMatch[1].toLowerCase() : "utf-8";
+
+            if (charset !== "utf-8") {
                 title = null;
             }
         }
+    } catch (error) {
+        console.error('Error fetching URL:', error);
+        siyuan.showMessage("Error fetching URL: " + error);
+        return null;
     }
+
     return title;
-}
+};
+
+
 
 const STORAGE_NAME = 'config.json';
 
@@ -146,6 +185,8 @@ class TitledUrlPlugin extends siyuan.Plugin {
                 if (replaceTitle) {
                     element.setAttribute('data-title', title);
                 }
+            } else {
+                siyuan.showMessage(this.i18n.titleNotFound + dataHref, 4000, 'error');
             }
             return
         }

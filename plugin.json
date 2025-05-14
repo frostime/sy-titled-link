@@ -2,7 +2,7 @@
   "name": "sy-titled-link",
   "author": "frostime",
   "url": "https://github.com/frostime/sy-titled-link",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "minAppVersion": "2.10.0",
   "backends": [
     "all"
@@ -22,5 +22,11 @@
     "en_US": "README_en_US.md",
     "zh_CN": "README.md"
   },
-  "keywords": ["url", "link", "网页链接", "标题", "title"]
+  "keywords": [
+    "url",
+    "link",
+    "网页链接",
+    "标题",
+    "title"
+  ]
 }

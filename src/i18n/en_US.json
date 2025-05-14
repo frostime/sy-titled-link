@@ -3,5 +3,6 @@
     "replaceTitle": {
         "title": "Replace Title Too",
         "description": "By default, only the anchor text is replaced. <br/>If this option is turned on, the title field will be replaced at the same time."
-    }
+    },
+    "titleNotFound": "Cannot get the title of website"
 }

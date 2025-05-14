@@ -3,5 +3,6 @@
     "replaceTitle": {
         "title": "替换标题部分",
         "description": "默认只替换锚文本, 如果开启此选项, 会同时替换标题字段"
-    }
+    },
+    "titleNotFound": "无法解析到网站的标题"
 }
