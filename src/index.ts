@@ -36,6 +36,8 @@ const getTitle = async (href: string): Promise<string | null> => {
                 5000, 'text/html'
             );
 
+            // debugger
+
             if (!data || (data.status / 100) !== 2) {
                 return null;
             }
@@ -63,9 +65,8 @@ const getTitle = async (href: string): Promise<string | null> => {
             title = matchRes[1];
             //@ts-ignore - assuming Lute is available in global scope
             title = window.Lute?.UnEscapeHTMLStr(title) || title;
-
             // Charset detection
-            const charsetReg = /<meta\b[^>]*charset=['"]?([^'"]*)['"]?[^>]*>/i;
+            const charsetReg = /<meta\b[^>]+charset\s*=\s*['"]?([^\s'">]+)['"]?[^>]*>/i;
             const charsetMatch = html.match(charsetReg);
             const charset = charsetMatch ? charsetMatch[1].toLowerCase() : "utf-8";
 
